@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=3 uid="uid://csni1uw5a41hg"]
+
+[ext_resource type="Script" uid="uid://dne0mytnw40hc" path="res://Player/player.gd" id="1_l8h54"]
+[ext_resource type="PackedScene" uid="uid://ditdum7ioxw8n" path="res://Player/rig.tscn" id="2_4ntmi"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_hvfyp"]
+
+[sub_resource type="SeparationRayShape3D" id="SeparationRayShape3D_l8h54"]
+slide_on_slope = true
+
+[node name="Player" type="CharacterBody3D"]
+script = ExtResource("1_l8h54")
+mouse_sensitivity = 0.008
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_hvfyp")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.165048, 0.986286, 0, -0.986286, 0.165048, 0, 0, 0)
+shape = SubResource("SeparationRayShape3D_l8h54")
+spring_length = 4.0
+
+[node name="Camera3D" type="Camera3D" parent="SpringArm3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.000166714, 1.0948)
+
+[node name="HorizontalPivot" type="Node3D" parent="."]
+
+[node name="VerticalPivot" type="Node3D" parent="HorizontalPivot"]
+
+[node name="RigPivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.981184, 0)
+
+[node name="Rig" parent="RigPivot" instance=ExtResource("2_4ntmi")]
+
+[node name="Skeleton3D" parent="RigPivot/Rig/CharacterRig/GameRig" index="0"]
+bones/0/position = Vector3(5.76039e-15, 0.897359, -0.0481735)
+bones/2/rotation = Quaternion(-0.00164808, -0.00041294, 0.00321472, 0.999993)
+bones/3/rotation = Quaternion(-0.096311, -0.000377733, 0.00852015, 0.995315)
+bones/4/rotation = Quaternion(0.276964, 1.57031e-08, 9.0119e-08, 0.96088)
+bones/6/rotation = Quaternion(-0.156321, -1.17797e-07, -1.82904e-08, 0.987706)
+bones/7/position = Vector3(-1.86933e-08, 0.897359, -0.0481734)
+bones/8/position = Vector3(-6.07275e-08, 0.897359, -0.0481735)
+bones/9/position = Vector3(0.131144, 0.963564, -0.0351291)
+bones/9/rotation = Quaternion(0.993001, 0.0208828, -0.0309439, 0.112048)
+bones/11/rotation = Quaternion(0.421218, -0.000700546, 0.000325496, 0.906959)
+bones/13/rotation = Quaternion(-0.752019, 0.0118872, 0.0244064, 0.658582)
+bones/15/position = Vector3(-0.131144, 0.963564, -0.0351291)
+bones/15/rotation = Quaternion(0.973115, -0.00579758, 0.0273115, 0.22862)
+bones/17/rotation = Quaternion(0.445196, 0.00329721, -0.00163944, 0.895426)
+bones/19/rotation = Quaternion(-0.688599, -0.0281948, -0.000705502, 0.724594)
+bones/21/position = Vector3(0.0251286, 1.42755, 0.0425406)
+bones/21/rotation = Quaternion(-0.492285, -0.258422, -0.400782, 0.728181)
+bones/22/position = Vector3(0.188632, 1.46449, -0.0233559)
+bones/22/rotation = Quaternion(0.0488315, -0.15985, 0.974494, -0.149752)
+bones/23/rotation = Quaternion(7.18788e-08, -0.0167955, 6.72129e-08, 0.999859)
+bones/24/rotation = Quaternion(0.300934, -0.0167962, -0.0184365, 0.953319)
+bones/46/position = Vector3(-0.0113635, 1.42755, 0.0425406)
+bones/46/rotation = Quaternion(-0.510375, 0.22149, 0.375571, 0.74122)
+bones/47/position = Vector3(-0.167429, 1.46495, -0.0392147)
+bones/47/rotation = Quaternion(-0.0738126, -0.13709, 0.973318, 0.168551)
+bones/48/rotation = Quaternion(1.04555e-07, 0.0145407, 1.17492e-07, 0.999894)
+bones/49/rotation = Quaternion(0.334083, 0.0145411, 0.028969, 0.941986)
+bones/71/position = Vector3(0.127191, 1.34608, -0.0262938)
+bones/71/rotation = Quaternion(1.9347e-08, 0.612486, 0.790481, -4.63977e-08)
+bones/72/position = Vector3(-0.113426, 1.34608, -0.0262938)
+bones/72/rotation = Quaternion(1.93471e-08, 0.612486, 0.790481, -4.63976e-08)
+
+[node name="AnimationPlayer" parent="RigPivot/Rig/CharacterRig" index="1"]
+deterministic = true
+
+[node name="RightHandBone" parent="RigPivot/Rig" index="2"]
+transform = Transform3D(-0.962343, -0.270802, -0.0237141, 0.240292, -0.88821, 0.391592, -0.127107, 0.371148, 0.919833, -0.341246, 0.983767, -0.0269628)
+
+[node name="BoneAttachment3D" parent="RigPivot/Rig" index="3"]
+transform = Transform3D(-0.970513, 0.239108, 0.0305214, -0.221105, -0.933482, 0.282354, 0.0960043, 0.26728, 0.958824, 0.345442, 0.971443, -0.0467753)
+
+[editable path="RigPivot/Rig"]
+[editable path="RigPivot/Rig/CharacterRig"]
