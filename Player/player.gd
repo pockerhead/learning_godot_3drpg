@@ -1,8 +1,9 @@
 extends CharacterBody3D
-
+class_name Player
 
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
+const DECAY := 8.0
 
 # Stores the x/y direction the player is trying to look in
 var _look := Vector2.ZERO
@@ -19,38 +20,35 @@ var _attack_direction = Vector3.ZERO
 @onready var vertical_pivot: Node3D = $HorizontalPivot/VerticalPivot
 @onready var rig_pivot: Node3D = $RigPivot
 @onready var rig: Node3D = $RigPivot/Rig
-
+@onready var attack_cast: RayCast3D = %AttackCast
+@onready var health_component: HealthComponent = $HealthComponent
+@onready var collision_shape_3d: CollisionShape3D = $CollisionShape3D
+@onready var area_attack: AreaAttack = $RigPivot/AreaAttack
 
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	health_component.update_max_health(30.0)
 
 func _physics_process(delta: float) -> void:
 	frame_camera_rotation()
-	# Add the gravity.
-	if not is_on_floor():
-		velocity += get_gravity() * delta
-
 	# Handle jump.
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
-
 	var local_speed = SPEED
-	
 	if Input.is_action_pressed("sprint"):
 		local_speed *= 1.5
-	# Get the input direction and handle the movement/deceleration.
-	# As good practice, you should replace UI actions with custom gameplay actions.
 	var direction := get_movement_direction()
 	rig.update_animation_tree(direction)
-	if direction:
-		velocity.x = direction.x * local_speed
-		velocity.z = direction.z * local_speed
-		look_toward_direction(direction, delta)
-	else:
-		velocity.x = move_toward(velocity.x, 0, local_speed)
-		velocity.z = move_toward(velocity.z, 0, local_speed)
+	# Не вызываем handle_idle_physics_frame во время дэша
+	if not rig.is_dashing():
+		handle_idle_physics_frame(delta, direction, local_speed)
 	handle_slashing_physics_frame(delta)
+	handle_overhead_physics_frame()
+	# Add the gravity.
+	if not is_on_floor():
+		velocity += get_gravity() * delta
+		
 	move_and_slide()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -59,10 +57,12 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED && event is InputEventMouseMotion:
 		_look = -event.relative * mouse_sensitivity
-		print(_look)
 	
-	if rig.is_idle() && Input.is_action_pressed("click"):
+	if rig.is_idle():
+		if event.is_action_pressed("click"):
 			slash_attack()
+		if event.is_action_pressed("right_click"):
+			heavy_attack()
 
 func get_movement_direction() -> Vector3:
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
@@ -92,6 +92,14 @@ func slash_attack() -> void:
 	_attack_direction = get_movement_direction()
 	if _attack_direction.is_zero_approx():
 		_attack_direction = rig.global_basis * Vector3.BACK
+	attack_cast.clear_exceptions()
+	
+func heavy_attack() -> void:
+	rig.travel("Overhead")
+	_attack_direction = get_movement_direction()
+	if _attack_direction.is_zero_approx():
+		_attack_direction = rig.global_basis * Vector3.BACK
+	attack_cast.clear_exceptions()
 	
 func handle_slashing_physics_frame(delta: float):
 	if not rig.is_slashing():
@@ -99,3 +107,43 @@ func handle_slashing_physics_frame(delta: float):
 	velocity.x = _attack_direction.x * attack_move_speed
 	velocity.z = _attack_direction.z * attack_move_speed
 	look_toward_direction(_attack_direction, delta)
+	attack_cast.deal_damage()
+
+func handle_idle_physics_frame(delta: float, direction: Vector3, local_speed: float):
+	if not rig.is_idle():
+		return
+	velocity.x = exponential_decay(
+		velocity.x, 
+		direction.x * local_speed,
+		DECAY,
+		delta
+	)
+	velocity.z = exponential_decay(
+		velocity.z, 
+		direction.z * local_speed,
+		DECAY,
+		delta
+	)
+	if direction:
+		look_toward_direction(direction, delta)
+	return
+
+func handle_overhead_physics_frame():
+	if not rig.is_overhead():
+		return
+	velocity.x = 0
+	velocity.z = 0
+
+func _on_health_component_defeat() -> void:
+	rig.travel("Defeat")
+	collision_shape_3d.disabled = true
+	set_physics_process(false)
+
+
+func _on_rig_heavy_attack() -> void:
+	area_attack.deal_damage(50)
+
+
+func exponential_decay(a: float, b: float, decay: float, delta: float) -> float:
+	return b + (b - a) * exp(-decay * delta)
+	
