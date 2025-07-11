@@ -114,6 +114,7 @@ transform = Transform3D(-0.999552, 0, 0.0299453, 0, 1, 0, -0.0299453, 0, -0.9995
 
 [node name="Enemy2" parent="Enemies" instance=ExtResource("6_t80w2")]
 transform = Transform3D(-0.999552, 0, 0.0299453, 0, 1, 0, -0.0299453, 0, -0.999552, -3.38287, 0, 12.1731)
+xp_value = 100
 
 [node name="Enemy3" parent="Enemies" instance=ExtResource("6_t80w2")]
 transform = Transform3D(-0.999552, 0, 0.0299453, 0, 1, 0, -0.0299453, 0, -0.999552, -5.33694, 0, 10.8947)

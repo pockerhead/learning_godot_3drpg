@@ -15,6 +15,8 @@ var _attack_direction = Vector3.ZERO
 @export var max_boundary: float = 10
 @export var animation_decay: float = 20.0
 @export var attack_move_speed: float = 3.0
+@export_category("RPG Stats")
+@export var stats: CharacterStats
 
 @onready var horizontal_pivot: Node3D = $HorizontalPivot
 @onready var vertical_pivot: Node3D = $HorizontalPivot/VerticalPivot
@@ -29,13 +31,14 @@ var _attack_direction = Vector3.ZERO
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	health_component.update_max_health(30.0)
+	print(stats.get_base_speed())
 
 func _physics_process(delta: float) -> void:
 	frame_camera_rotation()
 	# Handle jump.
 	if Input.is_action_just_pressed("ui_accept") and is_on_floor():
 		velocity.y = JUMP_VELOCITY
-	var local_speed = SPEED
+	var local_speed = stats.get_base_speed()
 	if Input.is_action_pressed("sprint"):
 		local_speed *= 1.5
 	var direction := get_movement_direction()
@@ -107,7 +110,7 @@ func handle_slashing_physics_frame(delta: float):
 	velocity.x = _attack_direction.x * attack_move_speed
 	velocity.z = _attack_direction.z * attack_move_speed
 	look_toward_direction(_attack_direction, delta)
-	attack_cast.deal_damage()
+	attack_cast.deal_damage(10.0 + stats.get_damage_modifier())
 
 func handle_idle_physics_frame(delta: float, direction: Vector3, local_speed: float):
 	if not rig.is_idle():
@@ -141,7 +144,7 @@ func _on_health_component_defeat() -> void:
 
 
 func _on_rig_heavy_attack() -> void:
-	area_attack.deal_damage(50)
+	area_attack.deal_damage(10.0 + stats.get_damage_modifier())
 
 
 func exponential_decay(a: float, b: float, decay: float, delta: float) -> float:

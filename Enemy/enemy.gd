@@ -2,12 +2,15 @@ extends CharacterBody3D
 class_name Enemy
 
 @export var max_health: float = 20.0
+@export var xp_value: int = 20
 
 @onready var rig: Node3D = $Rig
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var collision_shape_3d: CollisionShape3D = $CollisionShape3D
 @onready var player_detector: ShapeCast3D = $Rig/PlayerDetector
 @onready var area_attack: AreaAttack = $Rig/AreaAttack
+
+@onready var player: Player = get_tree().get_first_node_in_group("Player")
 
 func _ready() -> void:
 	rig.set_active_mesh(
@@ -26,6 +29,7 @@ func check_for_attacks():
 			rig.travel("Overhead")
 
 func _on_health_component_defeat() -> void:
+	player.stats.xp += xp_value
 	rig.travel("Defeat")
 	collision_shape_3d.disabled = true
 	set_physics_process(false)
