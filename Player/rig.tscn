@@ -1,9 +1,9 @@
 [gd_scene load_steps=22 format=3 uid="uid://ditdum7ioxw8n"]
 
 [ext_resource type="Script" uid="uid://dx76ynsqfahnf" path="res://Player/rig.gd" id="1_wer68"]
-[ext_resource type="PackedScene" uid="uid://vpcplgjpqk0p" path="res://Assets/Character/CharacterRig.glb" id="1_ydo8n"]
-[ext_resource type="PackedScene" uid="uid://bbt8um1jtpd20" path="res://Assets/Character/Gear/Longsword.glb" id="3_ojd8b"]
-[ext_resource type="PackedScene" uid="uid://dwnx2l3uyn732" path="res://Assets/Character/Gear/Short_Shield.glb" id="4_awthv"]
+[ext_resource type="PackedScene" uid="uid://vpcplgjpqk0p" path="res://Assets/3D_Assets/Character/CharacterRig.glb" id="1_ydo8n"]
+[ext_resource type="PackedScene" uid="uid://bbt8um1jtpd20" path="res://Assets/3D_Assets/Character/Gear/Longsword.glb" id="3_ojd8b"]
+[ext_resource type="PackedScene" uid="uid://dwnx2l3uyn732" path="res://Assets/3D_Assets/Character/Gear/Short_Shield.glb" id="4_awthv"]
 
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vcvy3"]
 animation = &"Dash"

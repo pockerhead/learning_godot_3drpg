@@ -29,7 +29,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	
 	gpu_particles_3d.emitting = true
 	player.rig.travel("Dash")
-	timer.start(1)
+	timer.start(player.stats.get_dash_cooldown())
 	time_remaining = dash_duration
 
 func _physics_process(delta: float) -> void:

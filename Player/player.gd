@@ -21,17 +21,24 @@ var _attack_direction = Vector3.ZERO
 @onready var horizontal_pivot: Node3D = $HorizontalPivot
 @onready var vertical_pivot: Node3D = $HorizontalPivot/VerticalPivot
 @onready var rig_pivot: Node3D = $RigPivot
-@onready var rig: Node3D = $RigPivot/Rig
+@onready var rig: Rig = $RigPivot/Rig
 @onready var attack_cast: RayCast3D = %AttackCast
 @onready var health_component: HealthComponent = $HealthComponent
 @onready var collision_shape_3d: CollisionShape3D = $CollisionShape3D
 @onready var area_attack: AreaAttack = $RigPivot/AreaAttack
-
+@onready var user_interface: UserInterface = %UserInterface
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	health_component.update_max_health(30.0)
+	health_component.update_max_health(stats.get_max_hp())
 	print(stats.get_base_speed())
+	user_interface.update_stats_display()
+	stats.level_up_notification.connect(
+		func(): health_component.update_max_health(stats.get_max_hp())
+	)
+	stats.update_stats_notification.connect(
+		func(): user_interface.update_stats_display()
+	)
 
 func _physics_process(delta: float) -> void:
 	frame_camera_rotation()
@@ -51,7 +58,6 @@ func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
-		
 	move_and_slide()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -110,7 +116,7 @@ func handle_slashing_physics_frame(delta: float):
 	velocity.x = _attack_direction.x * attack_move_speed
 	velocity.z = _attack_direction.z * attack_move_speed
 	look_toward_direction(_attack_direction, delta)
-	attack_cast.deal_damage(10.0 + stats.get_damage_modifier())
+	attack_cast.deal_damage(10.0 + stats.get_damage_modifier(), stats.get_crit_chance())
 
 func handle_idle_physics_frame(delta: float, direction: Vector3, local_speed: float):
 	if not rig.is_idle():
@@ -141,10 +147,12 @@ func _on_health_component_defeat() -> void:
 	rig.travel("Defeat")
 	collision_shape_3d.disabled = true
 	set_physics_process(false)
+	await get_tree().create_timer(0.3).timeout
+	user_interface.play_dead_animation()
 
 
 func _on_rig_heavy_attack() -> void:
-	area_attack.deal_damage(10.0 + stats.get_damage_modifier())
+	area_attack.deal_damage(10.0 + stats.get_damage_modifier(), stats.get_crit_chance())
 
 
 func exponential_decay(a: float, b: float, decay: float, delta: float) -> float:

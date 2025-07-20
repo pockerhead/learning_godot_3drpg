@@ -1,10 +1,10 @@
 [gd_scene load_steps=11 format=3 uid="uid://vn0bimgm4tj7"]
 
 [ext_resource type="PackedScene" uid="uid://csni1uw5a41hg" path="res://Player/player.tscn" id="1_s41d2"]
-[ext_resource type="PackedScene" uid="uid://bq0db6kyxvulr" path="res://Assets/Environment/Rock_Cliff_Env_03.glb" id="2_gtnvv"]
-[ext_resource type="PackedScene" uid="uid://oi4yd1ynv8no" path="res://Assets/Environment/Topiary_Tree_Vege_01.glb" id="3_uhyyw"]
-[ext_resource type="PackedScene" uid="uid://u30yj6g8kf7h" path="res://Assets/Environment/Tree_Group_Vege.glb" id="4_t80w2"]
-[ext_resource type="PackedScene" uid="uid://cjnsdy33gocpu" path="res://Assets/Environment/Bush_Vege_2.glb" id="5_8a2b0"]
+[ext_resource type="PackedScene" uid="uid://bq0db6kyxvulr" path="res://Assets/3D_Assets/Environment/Rock_Cliff_Env_03.glb" id="2_gtnvv"]
+[ext_resource type="PackedScene" uid="uid://oi4yd1ynv8no" path="res://Assets/3D_Assets/Environment/Topiary_Tree_Vege_01.glb" id="3_uhyyw"]
+[ext_resource type="PackedScene" uid="uid://u30yj6g8kf7h" path="res://Assets/3D_Assets/Environment/Tree_Group_Vege.glb" id="4_t80w2"]
+[ext_resource type="PackedScene" uid="uid://cjnsdy33gocpu" path="res://Assets/3D_Assets/Environment/Bush_Vege_2.glb" id="5_8a2b0"]
 [ext_resource type="PackedScene" uid="uid://b4xf04urt1g0d" path="res://Enemy/Enemy.tscn" id="6_t80w2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_54b6e"]
@@ -39,7 +39,7 @@ size = Vector3(50, 1, 50)
 material = SubResource("StandardMaterial3D_gtnvv")
 
 [node name="Player" parent="." instance=ExtResource("1_s41d2")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(-0.994151, 0, 0.107999, 0, 1, 0, -0.107999, 0, -0.994151, 0, 1, 0)
 
 [node name="MapBoundary" type="Node3D" parent="."]
 
@@ -114,7 +114,6 @@ transform = Transform3D(-0.999552, 0, 0.0299453, 0, 1, 0, -0.0299453, 0, -0.9995
 
 [node name="Enemy2" parent="Enemies" instance=ExtResource("6_t80w2")]
 transform = Transform3D(-0.999552, 0, 0.0299453, 0, 1, 0, -0.0299453, 0, -0.999552, -3.38287, 0, 12.1731)
-xp_value = 100
 
 [node name="Enemy3" parent="Enemies" instance=ExtResource("6_t80w2")]
 transform = Transform3D(-0.999552, 0, 0.0299453, 0, 1, 0, -0.0299453, 0, -0.999552, -5.33694, 0, 10.8947)

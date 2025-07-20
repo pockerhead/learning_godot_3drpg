@@ -1,6 +1,9 @@
 extends Resource
 class_name CharacterStats
 
+signal level_up_notification()
+signal update_stats_notification()
+
 class Ability:
 	var min_modifier: float
 	var max_modifier: float
@@ -24,6 +27,9 @@ class Ability:
 	func increase():
 		ability_score += randi_range(2, 5)
 
+const MIN_DASH_COOLDOWN := 1.5
+const MAX_DASH_COOLDOWN := 0.5
+
 var level := 1
 var xp := 0:
 	set(value):
@@ -34,6 +40,7 @@ var xp := 0:
 			xp -= boundary
 			level_up()
 			boundary = percentage_level_up_boundary()
+		update_stats_notification.emit()
 
 var strength := Ability.new(2.0, 12.0)
 var speed := Ability.new(3.0, 7.0)
@@ -49,12 +56,19 @@ func get_damage_modifier() -> float:
 func get_crit_chance() -> float:
 	return agility.get_modifier()
 
+func get_max_hp() -> int:
+	return 50 + int(level * endurance.get_modifier())
+
+func get_dash_cooldown() -> float:
+	return agility.percentile_lerp(MIN_DASH_COOLDOWN, MAX_DASH_COOLDOWN)
+
 func level_up():
 	level += 1
 	for ability: Ability in [strength, speed, endurance, agility]:
 		ability.increase()
 		
 	printt("LEVEL UP:", level)
+	level_up_notification.emit()
 
 		
 func percentage_level_up_boundary() -> int:

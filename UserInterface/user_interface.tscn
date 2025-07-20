@@ -1,0 +1,197 @@
+[gd_scene load_steps=15 format=3 uid="uid://ctdl33xovdj0c"]
+
+[ext_resource type="Script" uid="uid://u6x8f27ars1s" path="res://UserInterface/user_interface.gd" id="1_cp462"]
+[ext_resource type="Texture2D" uid="uid://oguvunysx7rw" path="res://Assets/UIAssets/Unitframe/HealthBarUnder.png" id="2_7061l"]
+[ext_resource type="FontFile" uid="uid://d34bwwr0vqhqt" path="res://Assets/Fonts/LibreCaslonText/LibreCaslonText-Italic.ttf" id="2_l8ojb"]
+[ext_resource type="Texture2D" uid="uid://qxpbwbv88ho3" path="res://Assets/UIAssets/Unitframe/MainBar.png" id="3_6v6ea"]
+[ext_resource type="FontFile" uid="uid://bugnvrjntdvwe" path="res://Assets/Fonts/LibreCaslonText/LibreCaslonText-Bold.ttf" id="4_3o1tv"]
+[ext_resource type="Texture2D" uid="uid://cr66kk0c0bdwp" path="res://Assets/UIAssets/Unitframe/BlueBar.png" id="5_uup2c"]
+[ext_resource type="Texture2D" uid="uid://bfcgjdganr5nx" path="res://Assets/UIAssets/Unitframe/HealthBarOver.png" id="6_46rrt"]
+[ext_resource type="PackedScene" uid="uid://cv0xyuxcgayai" path="res://UserInterface/inventory.tscn" id="8_7061l"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_l8ojb"]
+font = ExtResource("4_3o1tv")
+font_size = 22
+font_color = Color(0.93, 0.87358, 0.6882, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_1yg0r"]
+font = ExtResource("4_3o1tv")
+font_size = 36
+font_color = Color(0.93, 0.87358, 0.6882, 1)
+
+[sub_resource type="Animation" id="Animation_uup2c"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DeadRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_6v6ea"]
+resource_name = "died"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DeadRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_46rrt"]
+_data = {
+&"RESET": SubResource("Animation_uup2c"),
+&"died": SubResource("Animation_6v6ea")
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_7061l"]
+font = ExtResource("2_l8ojb")
+font_size = 80
+font_color = Color(0.4, 0.172, 0.172, 1)
+
+[node name="UserInterface" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_cp462")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="InfoBar" type="Control" parent="MarginContainer"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="HealthBarUnder" type="TextureRect" parent="MarginContainer/InfoBar"]
+layout_mode = 1
+offset_top = -5.0
+offset_right = 460.0
+offset_bottom = 139.0
+texture = ExtResource("2_7061l")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="HealthBar" type="TextureProgressBar" parent="MarginContainer/InfoBar/HealthBarUnder"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -10.0
+offset_top = 3.0
+offset_right = 2.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+value = 70.0
+nine_patch_stretch = true
+texture_progress = ExtResource("3_6v6ea")
+
+[node name="HPLabel" type="Label" parent="MarginContainer/InfoBar/HealthBarUnder/HealthBar"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(95, 0)
+layout_mode = 1
+offset_left = 131.0
+offset_top = 35.0
+offset_right = 238.0
+offset_bottom = 66.0
+text = "100/1000"
+label_settings = SubResource("LabelSettings_l8ojb")
+vertical_alignment = 1
+
+[node name="XPBar" type="TextureProgressBar" parent="MarginContainer/InfoBar/HealthBarUnder"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 19.0
+offset_top = 5.0
+offset_right = 274.0
+offset_bottom = 95.0
+scale = Vector2(1.72412, 1.47729)
+value = 100.0
+nine_patch_stretch = true
+texture_progress = ExtResource("5_uup2c")
+
+[node name="HealthBarOver" type="TextureRect" parent="MarginContainer/InfoBar"]
+layout_mode = 1
+offset_right = 137.0
+offset_bottom = 137.0
+texture = ExtResource("6_46rrt")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="LevelLabel" type="Label" parent="MarginContainer/InfoBar/HealthBarOver"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(95, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -337.412
+offset_bottom = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "999"
+label_settings = SubResource("LabelSettings_1yg0r")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DeadPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+libraries = {
+&"": SubResource("AnimationLibrary_46rrt")
+}
+
+[node name="DeadRect" type="ColorRect" parent="."]
+unique_name_in_owner = true
+visible = false
+top_level = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="DeadLabel" type="Label" parent="DeadRect"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "YOU ARE DIED"
+label_settings = SubResource("LabelSettings_7061l")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Inventory" parent="." instance=ExtResource("8_7061l")]
+visible = false
+layout_mode = 1
