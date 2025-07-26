@@ -9,6 +9,8 @@ class_name UserInterface
 @onready var deadPlayer: AnimationPlayer = %DeadPlayer
 @onready var deadBackground: ColorRect = %DeadRect
 @onready var inventory: Inventory = $Inventory
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
+@onready var interact_text: Label = %InteractText
 
 func _ready():
 	deadBackground.visible = false
@@ -46,3 +48,8 @@ func _unhandled_input(event: InputEvent) -> void:
 			close_inventory()
 		else:
 			open_inventory()
+
+func update_interact_text(text: String) -> void:
+	interact_text.text = text
+	animation_player.stop()
+	animation_player.play("FadeOutText")

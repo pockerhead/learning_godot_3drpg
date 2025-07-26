@@ -27,11 +27,11 @@ var _attack_direction = Vector3.ZERO
 @onready var collision_shape_3d: CollisionShape3D = $CollisionShape3D
 @onready var area_attack: AreaAttack = $RigPivot/AreaAttack
 @onready var user_interface: UserInterface = %UserInterface
+@onready var interaction_cast: ShapeCast3D = $RigPivot/InteractionCast
 
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	health_component.update_max_health(stats.get_max_hp())
-	print(stats.get_base_speed())
 	user_interface.update_stats_display()
 	stats.level_up_notification.connect(
 		func(): health_component.update_max_health(stats.get_max_hp())
@@ -55,6 +55,7 @@ func _physics_process(delta: float) -> void:
 		handle_idle_physics_frame(delta, direction, local_speed)
 	handle_slashing_physics_frame(delta)
 	handle_overhead_physics_frame()
+	interaction_cast.check_interactions()
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta

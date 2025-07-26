@@ -76,7 +76,3 @@ func percentage_level_up_boundary() -> int:
 
 func cubic_level_up_boundary() -> int:
 	return int(50 + pow(level, 3))
-
-func _init() -> void:
-	#xp += 1000
-	print(level)

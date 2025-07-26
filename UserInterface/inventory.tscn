@@ -1,10 +1,11 @@
-[gd_scene load_steps=18 format=3 uid="uid://cv0xyuxcgayai"]
+[gd_scene load_steps=23 format=3 uid="uid://cv0xyuxcgayai"]
 
 [ext_resource type="Texture2D" uid="uid://col80qslwcbsr" path="res://Assets/UIAssets/Window/window_header.png" id="1_hqat6"]
 [ext_resource type="Script" uid="uid://ceentch2ets8b" path="res://UserInterface/inventory.gd" id="1_iclm4"]
 [ext_resource type="FontFile" uid="uid://bugnvrjntdvwe" path="res://Assets/Fonts/LibreCaslonText/LibreCaslonText-Bold.ttf" id="2_w4h00"]
 [ext_resource type="StyleBox" uid="uid://dad0h0oc4jnr3" path="res://UserInterface/ui_panel.tres" id="3_h3yq5"]
 [ext_resource type="FontFile" uid="uid://q5jhtrxxc2y4" path="res://Assets/Fonts/LibreCaslonText/LibreCaslonText-Regular.ttf" id="4_c11vl"]
+[ext_resource type="PackedScene" uid="uid://ditdum7ioxw8n" path="res://Player/rig.tscn" id="5_2pqip"]
 [ext_resource type="Texture2D" uid="uid://bnmit1uf72hgj" path="res://Assets/UIAssets/Icons/spell_slot_empty.png" id="5_6ivh5"]
 [ext_resource type="FontFile" uid="uid://d34bwwr0vqhqt" path="res://Assets/Fonts/LibreCaslonText/LibreCaslonText-Italic.ttf" id="6_iclm4"]
 [ext_resource type="Texture2D" uid="uid://drg3n3f5abdt8" path="res://Assets/UIAssets/Button Small/button_small.png" id="8_qnmx2"]
@@ -23,6 +24,22 @@ metadata/_snap_enabled = true
 [sub_resource type="LabelSettings" id="LabelSettings_h3yq5"]
 font = ExtResource("2_w4h00")
 font_size = 48
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_54b6e"]
+sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+ground_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
+
+[sub_resource type="Sky" id="Sky_s41d2"]
+sky_material = SubResource("ProceduralSkyMaterial_54b6e")
+
+[sub_resource type="Environment" id="Environment_2pqip"]
+background_mode = 2
+sky = SubResource("Sky_s41d2")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="World3D" id="World3D_2pqip"]
+environment = SubResource("Environment_2pqip")
 
 [sub_resource type="LabelSettings" id="LabelSettings_6ivh5"]
 font = ExtResource("4_c11vl")
@@ -110,6 +127,24 @@ theme_override_styles/panel = ExtResource("3_h3yq5")
 [node name="SubViewportContainer" type="SubViewportContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(512, 0)
 layout_mode = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="MarginContainer/VBoxContainer/HBoxContainer/SubViewportContainer"]
+world_3d = SubResource("World3D_2pqip")
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(512, 2)
+render_target_update_mode = 4
+
+[node name="Rig" parent="MarginContainer/VBoxContainer/HBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("5_2pqip")]
+
+[node name="Camera3D" type="Camera3D" parent="MarginContainer/VBoxContainer/HBoxContainer/SubViewportContainer/SubViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.996195, 0.0871557, 0, -0.0871557, 0.996195, 0, 1.3, 2.5)
+fov = 51.2
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="MarginContainer/VBoxContainer/HBoxContainer/SubViewportContainer/SubViewport"]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
 custom_minimum_size = Vector2(384, 0)

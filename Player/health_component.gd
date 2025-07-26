@@ -17,7 +17,6 @@ var current_health: float:
 func update_max_health(max_hp_in: float):
 	max_health = max_hp_in
 	current_health = max_health
-	printt("update_max_health", max_health, current_health)
 	
 func take_damage(damage_in: float, is_crit: bool = false):
 	var damage = damage_in
@@ -25,10 +24,8 @@ func take_damage(damage_in: float, is_crit: bool = false):
 	if is_crit:
 		damage *= 2.0
 		color = Color.RED
-		print("CRITICAL HIT!")
 	current_health -= damage
 	VfxManager.spawn_damage_number(damage, color, body.position)
-	printt("take_damage", damage, current_health)
 
 func get_health_string() -> String:
 	return "%s/%s" % [current_health, max_health]
