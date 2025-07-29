@@ -9,8 +9,9 @@ class_name UserInterface
 @onready var deadPlayer: AnimationPlayer = %DeadPlayer
 @onready var deadBackground: ColorRect = %DeadRect
 @onready var inventory: Inventory = $Inventory
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var interact_text: Label = %InteractText
+@onready var loot_container: LootContainerBox = $LootContainerDisplay
+@onready var animation_player: AnimationPlayer = $HUD/InteractContainer/AnimationPlayer
 
 func _ready():
 	deadBackground.visible = false
@@ -53,3 +54,6 @@ func update_interact_text(text: String) -> void:
 	interact_text.text = text
 	animation_player.stop()
 	animation_player.play("FadeOutText")
+
+func open_loot_container(loot: LootContainer):
+	loot_container.open(loot)

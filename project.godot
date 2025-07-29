@@ -18,12 +18,13 @@ config/icon="res://icon.svg"
 [autoload]
 
 VfxManager="*res://Autoload/vfx_manager.tscn"
+SceneTransition="*res://Autoload/scene_transition.tscn"
+PersistentData="*res://Autoload/persistent_data.tscn"
 
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
-window/size/mode=3
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 

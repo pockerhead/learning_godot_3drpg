@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://ctdl33xovdj0c"]
+[gd_scene load_steps=22 format=3 uid="uid://ctdl33xovdj0c"]
 
 [ext_resource type="Script" uid="uid://u6x8f27ars1s" path="res://UserInterface/user_interface.gd" id="1_cp462"]
 [ext_resource type="Texture2D" uid="uid://oguvunysx7rw" path="res://Assets/UIAssets/Unitframe/HealthBarUnder.png" id="2_7061l"]
@@ -8,6 +8,7 @@
 [ext_resource type="Texture2D" uid="uid://cr66kk0c0bdwp" path="res://Assets/UIAssets/Unitframe/BlueBar.png" id="5_uup2c"]
 [ext_resource type="Texture2D" uid="uid://bfcgjdganr5nx" path="res://Assets/UIAssets/Unitframe/HealthBarOver.png" id="6_46rrt"]
 [ext_resource type="PackedScene" uid="uid://cv0xyuxcgayai" path="res://UserInterface/inventory.tscn" id="8_7061l"]
+[ext_resource type="PackedScene" uid="uid://qh4jk0drdwku" path="res://UserInterface/loot_container_display.tscn" id="9_6v6ea"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_l8ojb"]
 font = ExtResource("4_3o1tv")
@@ -31,48 +32,6 @@ color = Color(1, 1, 1, 1)
 font = ExtResource("4_3o1tv")
 font_size = 36
 shadow_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_7061l"]
-font = ExtResource("2_l8ojb")
-font_size = 80
-font_color = Color(0.4, 0.172, 0.172, 1)
-
-[sub_resource type="Animation" id="Animation_uup2c"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("DeadRect:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_6v6ea"]
-resource_name = "died"
-length = 3.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("DeadRect:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_46rrt"]
-_data = {
-&"RESET": SubResource("Animation_uup2c"),
-&"died": SubResource("Animation_6v6ea")
-}
 
 [sub_resource type="Animation" id="Animation_7061l"]
 resource_name = "FadeOutText"
@@ -133,6 +92,48 @@ tracks/1/keys = {
 _data = {
 &"FadeOutText": SubResource("Animation_7061l"),
 &"RESET": SubResource("Animation_46rrt")
+}
+
+[sub_resource type="LabelSettings" id="LabelSettings_7061l"]
+font = ExtResource("2_l8ojb")
+font_size = 80
+font_color = Color(0.4, 0.172, 0.172, 1)
+
+[sub_resource type="Animation" id="Animation_uup2c"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DeadRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_6v6ea"]
+resource_name = "died"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("DeadRect:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_46rrt"]
+_data = {
+&"RESET": SubResource("Animation_uup2c"),
+&"died": SubResource("Animation_6v6ea")
 }
 
 [node name="UserInterface" type="Control"]
@@ -247,7 +248,7 @@ mouse_filter = 2
 
 [node name="InteractButton" type="Label" parent="HUD/InteractContainer"]
 layout_mode = 2
-text = "spacebar"
+text = "press E"
 label_settings = SubResource("LabelSettings_6v6ea")
 horizontal_alignment = 1
 uppercase = true
@@ -263,6 +264,13 @@ text = "Open chest"
 label_settings = SubResource("LabelSettings_46rrt")
 horizontal_alignment = 1
 uppercase = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="HUD/InteractContainer"]
+root_node = NodePath("../../..")
+libraries = {
+&"": SubResource("AnimationLibrary_d6x7p")
+}
+autoplay = "RESET"
 
 [node name="DeadRect" type="ColorRect" parent="."]
 unique_name_in_owner = true
@@ -299,8 +307,6 @@ libraries = {
 visible = false
 layout_mode = 1
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-libraries = {
-&"": SubResource("AnimationLibrary_d6x7p")
-}
-autoplay = "RESET"
+[node name="LootContainerDisplay" parent="." node_paths=PackedStringArray("inventory") instance=ExtResource("9_6v6ea")]
+layout_mode = 1
+inventory = NodePath("../Inventory")

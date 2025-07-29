@@ -67,7 +67,6 @@ func level_up():
 	for ability: Ability in [strength, speed, endurance, agility]:
 		ability.increase()
 		
-	printt("LEVEL UP:", level)
 	level_up_notification.emit()
 
 		

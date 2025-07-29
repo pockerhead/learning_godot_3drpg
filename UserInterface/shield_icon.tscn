@@ -6,8 +6,8 @@
 
 [node name="ShieldIcon" instance=ExtResource("1_dq8qc")]
 script = ExtResource("2_rgj3v")
-power = 5
-shield = 1
+protection = 0
+item_model = null
 
 [node name="TypeIcon" parent="." index="0"]
 texture = ExtResource("2_hu1xo")

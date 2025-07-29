@@ -1,16 +1,10 @@
 extends ItemIcon
 class_name ShieldIcon
 
-@export var power: int
-@export var shield: shield_type
-
-enum shield_type {
-	SHORT_SHIELD,
-	TALL_SHIELD
-}
+@export var protection: int
+@export var item_model: PackedScene
 
 func _ready() -> void:
-	stat_label.text = "+" + str(power)
-	item_label.text = shield_type.keys()[shield]
-	item_label.text = item_label.text.capitalize()
+	stat_label.text = "+" + str(protection)
+	item_label.text = item_model.resource_path.get_file().get_basename().capitalize()
  

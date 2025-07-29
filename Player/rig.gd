@@ -14,6 +14,8 @@ signal heavy_attack()
 	$CharacterRig/GameRig/Skeleton3D/Villager_01,
 	$CharacterRig/GameRig/Skeleton3D/Villager_02
 ]
+@onready var iron_armor: MeshInstance3D = $CharacterRig/GameRig/Skeleton3D/Knight_02
+@onready var steel_armor: MeshInstance3D = $CharacterRig/GameRig/Skeleton3D/Knight_01
 
 var run_path: String = "parameters/MoveSpace/blend_position"
 var playback_path: String = "parameters/playback"
@@ -71,3 +73,12 @@ func replace_weapon(weapon_scene: PackedScene) -> void:
 
 	var weapon_instance = weapon_scene.instantiate()
 	weapon_slot.add_child(weapon_instance)
+
+func replace_armor(armor_type: ArmorIcon.armor_type):
+	match armor_type:
+		ArmorIcon.armor_type.IRON_PLATE:
+			set_active_mesh(iron_armor)
+		ArmorIcon.armor_type.STEEL_PLATE:
+			set_active_mesh(steel_armor)
+		_:
+			printerr("Error matching %s" % armor_type) 	
